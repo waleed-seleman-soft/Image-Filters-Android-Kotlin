@@ -44,5 +44,8 @@ The PhotoFilter library applies effects using OpenGL shaders in real-time.
 ---
 
 ## 📱 Screenshots
-![Screenshot 1](screenshots/image1.jpeg)
-![Screenshot 2](screenshots/image2.jpeg)
+<p align="center">
+  <img src="screenshots/image1.jpeg" width="280">
+  <img src="screenshots/image2.jpeg" width="280">
+  <img src="screenshots/image3.jpeg" width="280">
+</p>
