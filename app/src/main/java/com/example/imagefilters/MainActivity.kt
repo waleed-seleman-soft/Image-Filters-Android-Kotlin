@@ -29,6 +29,13 @@ class MainActivity : AppCompatActivity(),
     // Master image — NEVER sent directly to PhotoFilter
     private var originalBitmap: Bitmap? = null
 
+    private fun scaleToEffectView(bitmap: Bitmap): Bitmap {
+        val width = effectView.width.takeIf { it > 0 } ?: bitmap.width
+        val height = effectView.height.takeIf { it > 0 } ?: bitmap.height
+        return Bitmap.createScaledBitmap(bitmap, width, height, true)
+    }
+
+
     // Choosing image from gallery (modern API)
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
@@ -43,11 +50,12 @@ class MainActivity : AppCompatActivity(),
 
                     if (bitmap != null) {
 
-                        // 🔥 Always store a SAFE unmodified master copy
                         originalBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
-                        // Apply none filter using a working copy
-                        val working = originalBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
+                        // Scale to GLSurfaceView size
+                        val scaled = scaleToEffectView(originalBitmap!!)
+
+                        val working = scaled.copy(Bitmap.Config.ARGB_8888, true)
                         photoFilter?.applyEffect(working, None())
                     }
                 } catch (e: Exception) {
@@ -60,21 +68,23 @@ class MainActivity : AppCompatActivity(),
         result = bitmap
     }
 
-    // 🔥 APPLYING FILTER SAFELY
+    // APPLYING FILTER SAFELY
     override fun onFilterClicked(filters: Filters) {
 
-        // If original is null or already recycled, reload background
         if (originalBitmap == null || originalBitmap!!.isRecycled) {
             originalBitmap = BitmapFactory.decodeResource(resources, R.drawable.background)
                 .copy(Bitmap.Config.ARGB_8888, true)
         }
 
-        // ALWAYS make a new working copy
-        val workingCopy = originalBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
+        // Scale image to match GLSurfaceView
+        val scaled = scaleToEffectView(originalBitmap!!)
 
-        // Apply effect using the safe working copy
+        // Working safe copy
+        val workingCopy = scaled.copy(Bitmap.Config.ARGB_8888, true)
+
         photoFilter?.applyEffect(workingCopy, filters.filter)
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,8 +104,8 @@ class MainActivity : AppCompatActivity(),
         // Setup filter engine
         photoFilter = PhotoFilter(effectView, this)
 
-        // Show default image with None filter
-        val working = originalBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
+        val scaled = scaleToEffectView(originalBitmap!!)
+        val working = scaled.copy(Bitmap.Config.ARGB_8888, true)
         photoFilter?.applyEffect(working, None())
 
         // Setup RecyclerView

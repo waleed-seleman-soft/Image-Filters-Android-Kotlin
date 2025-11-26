@@ -1,67 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F7F7">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white"
+    tools:context=".MainActivity">
 
-    <!-- Top App Bar -->
-    <LinearLayout
-        android:id="@+id/topBar"
-        android:layout_width="0dp"
+    <!-- Center Choose Image Button -->
+    <Button
+        android:id="@+id/chooseImageButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#6200EE"
-        android:gravity="center_vertical"
-        android:padding="12dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/rounded_button_blue"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:text="Choose Image"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:elevation="4dp" />
 
-        <TextView
-            android:id="@+id/appTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Image Filters"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-
-        <Button
-            android:id="@+id/chooseImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Choose Image"
-            android:textColor="#000000"
-            android:backgroundTint="#FFFFFF"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="8dp"
-            android:textAllCaps="false"
-            android:layout_marginStart="8dp"
-            android:elevation="4dp"
-            android:stateListAnimator="@null"/>
-    </LinearLayout>
-
-    <!-- GLSurfaceView (Main Image Preview) -->
-    <android.opengl.GLSurfaceView
-        android:id="@+id/effectView"
-        android:layout_width="0dp"
+    <!-- TOP SPACER (takes 25% of screen) -->
+    <View
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintBottom_toTopOf="@id/effectsRecyclerView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_weight="1" />
 
-    <!-- Filter List -->
+    <!-- IMAGE CONTAINER (takes 50% of screen) -->
+    <FrameLayout
+        android:id="@+id/imageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <android.opengl.GLSurfaceView
+            android:id="@+id/effectView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <!-- BOTTOM SPACER (takes 25% of screen) -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Filters Row -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/effectsRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="110dp"
-        android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:padding="4dp"
+        android:clipToPadding="false" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
